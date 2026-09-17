@@ -4,3 +4,23 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Liquibase
+        uses: liquibase-github-actions/setup-liquibase@v1
+        with:
+          liquibaseVersion: '4.25.0'
+
+      - name: Run Liquibase Update
+        run: |
+          liquibase update \
+            --changelog-file=changelog/db.changelog-master.xml \
+            --url="jdbc:databricks://${{ secrets.DATABRICKS_HOST }}:443/default;transportMode=http;ssl=1;AuthMech=3;httpPath=${{ secrets.DATABRICKS_HTTP_PATH }};ConnCatalog=${{ secrets.DATABRICKS_CATALOG }}" \
+            --username=token \
+            --password=${{ secrets.DATABRICKS_TOKEN }}
