@@ -22,7 +22,7 @@ jobs:
         uses: liquibase/setup-liquibase@v3
         with:
           version: '4.25.0'
-          liquibaseEdition: 'community'
+          edition: 'community'
 
       - name: Run Liquibase Update
         run: |
