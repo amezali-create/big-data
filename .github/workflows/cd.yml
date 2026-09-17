@@ -24,10 +24,16 @@ jobs:
           version: '4.32.0'
           edition: 'community'
 
+      - name: Download Databricks JDBC Driver
+        run: |
+          mkdir -p liquibase_libs
+          curl -L -o liquibase_libs/DatabricksJDBC42.jar https://repo1.maven.org/maven2/com/databricks/databricks-jdbc/2.6.36/databricks-jdbc-2.6.36.jar
+
       - name: Run Liquibase Update
         run: |
           liquibase update \
             --changelog-file=changelog/db.changelog-master.xml \
+            --classpath=liquibase_libs/DatabricksJDBC42.jar \
             --url="jdbc:databricks://${{ secrets.DATABRICKS_HOST }}:443/default;transportMode=http;ssl=1;AuthMech=3;httpPath=${{ secrets.DATABRICKS_HTTP_PATH }};ConnCatalog=${{ secrets.DATABRICKS_CATALOG }}" \
             --username=token \
             --password=${{ secrets.DATABRICKS_TOKEN }}
