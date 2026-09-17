@@ -18,19 +18,21 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Install Liquibase & Databricks Driver
+      - name: Setup Liquibase
+        uses: liquibase/setup-liquibase@v3
+        with:
+          version: '4.32.0'
+          edition: 'community'
+
+      - name: Install Databricks Extension and Driver
         run: |
-          wget -qO- https://repo1.maven.org/maven2/org/liquibase/liquibase-core/4.32.0/liquibase-core-4.32.0.tar.gz | tar -xzf - -C /tmp
-          sudo mv /tmp/liquibase /usr/local/bin/
-          curl -L -o /tmp/databricks-jdbc.jar https://repo1.maven.org/maven2/com/databricks/databricks-jdbc/2.6.36/databricks-jdbc-2.6.36.jar
-          curl -L -o /tmp/liquibase-databricks.jar https://repo1.maven.org/maven2/org/liquibase/ext/liquibase-databricks/1.3.0/liquibase-databricks-1.3.0.jar
+          sudo curl -L -o /opt/hostedtoolcache/liquibase-community/4.32.0/x64/internal/lib/databricks-jdbc.jar https://repo1.maven.org/maven2/com/databricks/databricks-jdbc/2.6.36/databricks-jdbc-2.6.36.jar
+          sudo curl -L -o /opt/hostedtoolcache/liquibase-community/4.32.0/x64/internal/lib/liquibase-databricks.jar https://repo1.maven.org/maven2/org/liquibase/ext/liquibase-databricks/1.3.0/liquibase-databricks-1.3.0.jar
 
       - name: Run Liquibase Update
         run: |
-          liquibase \
-            --classpath="/tmp/databricks-jdbc.jar:/tmp/liquibase-databricks.jar" \
+          liquibase update \
             --changelog-file=changelog/db.changelog-master.xml \
             --url="jdbc:databricks://${{ secrets.DATABRICKS_HOST }}:443/default;transportMode=http;ssl=1;AuthMech=3;httpPath=${{ secrets.DATABRICKS_HTTP_PATH }};ConnCatalog=${{ secrets.DATABRICKS_CATALOG }}" \
             --username=token \
-            --password=${{ secrets.DATABRICKS_TOKEN }} \
-            update
+            --password=${{ secrets.DATABRICKS_TOKEN }}
