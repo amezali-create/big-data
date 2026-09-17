@@ -33,7 +33,7 @@ jobs:
       - name: Run Liquibase Update
         run: |
           liquibase \
-            --search-path=liquibase_libs \
+            --search-path=.,liquibase_libs \
             --changelog-file=changelog/db.changelog-master.xml \
             --url="jdbc:databricks://${{ secrets.DATABRICKS_HOST }}:443/default;transportMode=http;ssl=1;AuthMech=3;httpPath=${{ secrets.DATABRICKS_HTTP_PATH }};ConnCatalog=${{ secrets.DATABRICKS_CATALOG }}" \
             --username=token \
