@@ -4,7 +4,6 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <include file="changelog/001_create_bi_schema.sql"/>
     <include file="changelog/003_create_dim_date.sql"/>
     <include file="changelog/004_create_dim_product.sql"/>
     <include file="changelog/005_create_dim_customer.sql"/>
