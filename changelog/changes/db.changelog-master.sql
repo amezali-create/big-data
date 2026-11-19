@@ -11,4 +11,6 @@
     <include file="changelog/007_create_fact_sales.sql"/>
     <include file="changelog/008_create_bronze_silver_schemas.sql"/>
     <include file="changelog/009_create_bronze_raw_tables.sql"/>
+   <include file="changelog/changes/010_create_customers_raw.sql"/>
+  <include file="changelog/changes/011_create_stores_raw.sql"/>
 </databaseChangeLog>
