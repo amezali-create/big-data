@@ -6,3 +6,9 @@ crash.log
 .backup
 data/
 .DS_Store
+
+airflow/logs/
+airflow/*.json*
+airflow/*.db
+airflow/*.cfg
+airflow/*.pid
